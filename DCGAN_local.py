@@ -9,7 +9,7 @@ Original file is located at
 # **DCGAN on 11k Hands**
 
 Hands Dataset: 11076 images
-https://sites.google.com/view/11khands 
+https://sites.google.com/view/11khands
 
 Facades Dataset: 3528 images
 https://sites.google.com/site/zhexuutssjtu/projects/arch
@@ -17,8 +17,6 @@ https://sites.google.com/site/zhexuutssjtu/projects/arch
 ### Setup environment
 """
 
-from google.colab import drive
-drive.mount('/content/drive')
 
 # Commented out IPython magic to ensure Python compatibility.
 # %tensorflow_version 2.x
@@ -205,7 +203,7 @@ plt.imshow(generated_image[0,:,:,0])
 
 Downsample with convolution layers.
 
-Layers adapted from: 
+Layers adapted from:
 http://bamos.github.io/2016/08/09/deep-completion/
 """
 
@@ -216,7 +214,7 @@ def make_discriminator_model():
                                      input_shape=[64, 64, 3]))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3)) # prevents overfitting
-    
+
     # downsample to 16x16x128
     model.add(layers.Conv2D(128, (5, 5), strides=(2, 2), padding='same'))
     model.add(layers.LeakyReLU())
@@ -228,10 +226,10 @@ def make_discriminator_model():
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
 
-    # downsample to 4x4xx512
-    model.add(layers.Conv2D(512, (5, 5), strides=(2, 2), padding='same'))
-    model.add(layers.LeakyReLU())
-    model.add(layers.Dropout(0.3))
+    # # downsample to 4x4xx512
+    # model.add(layers.Conv2D(512, (5, 5), strides=(2, 2), padding='same'))
+    # model.add(layers.LeakyReLU())
+    # model.add(layers.Dropout(0.3))
 
     # output to 1x1x1
     model.add(layers.Flatten())
@@ -360,7 +358,7 @@ def train(dataset, epochs,training):
                              seed,
                              training)
 
-    # Save the model every 15 epochs
+    # Save the model every 5 epochs
     if (epoch + 1) % 5 == 0:
       checkpoint.save(file_prefix = checkpoint_prefix)
 
@@ -382,7 +380,7 @@ def train(dataset, epochs,training):
 #checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
 
 def restore_train(dataset, epochs,training,offset):
-  
+
   checkpoint.restore(manager.latest_checkpoint)
   if manager.latest_checkpoint:
     display.clear_output(wait=True)
@@ -412,7 +410,7 @@ def restore_train(dataset, epochs,training,offset):
                              training)
 
     # Save the model every _ epochs
-    if (epoch + 1) % 1 == 0:
+    if (epoch + 1) % 5 == 0:
       checkpoint.save(file_prefix = checkpoint_prefix)
 
     print ('Time for epoch {} is {} sec'.format(epoch + 1, time.time()-start))
@@ -465,8 +463,9 @@ def generate_gif(training):
 
 """### Execution"""
 
+#training is the model number
 training=8
-#os.mkdir('train{:02d}'.format(training))
+os.mkdir('train{:02d}'.format(training)) # comment out if directory exists
 train(train_ds, EPOCHS,training)
 generate_gifs(training)
 
@@ -478,20 +477,17 @@ generator.summary()
 
 """### JavaScript Functions to avoid timeout"""
 
-function ClickConnect(){
-    console.log('Working.')
-    document.querySelector("colab-toolbar-button").click() 
-}
-
-// Get the Interval ID 25 mins
-var setInterval_ID = setInterval(ClickConnect, 1500000);
-
-// Set timeout to call stop_interval function after 12 seconds
-//setTimeout(stop_interval, 12000);
-
-function stop_interval(){
-  	clearInterval(setInterval_ID);
-}
-
-"""### Blanks"""
-
+# function ClickConnect(){
+#     console.log('Working.')
+#     document.querySelector("colab-toolbar-button").click()
+# }
+#
+# // Get the Interval ID 25 mins
+# var setInterval_ID = setInterval(ClickConnect, 1500000);
+#
+# // Set timeout to call stop_interval function after 12 seconds
+# //setTimeout(stop_interval, 12000);
+#
+# function stop_interval(){
+#   	clearInterval(setInterval_ID);
+# }
