@@ -444,6 +444,8 @@ def restore_train(dataset, epochs,training,offset):
       signatures=None, options=None
   )
   print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+  with open('train{:02d}/time.txt'.format(training), 'w') as f:
+    f.write('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
 """### Helper functions to generate images and gifs"""
 
