@@ -9,3 +9,4 @@ Hands Dataset: 11076 images https://sites.google.com/view/11khands
   - matplotlib
   - imageio
   - iPython
+  - CUDA toolkit compatible with your GPU (optional)
