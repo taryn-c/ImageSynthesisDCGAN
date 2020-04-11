@@ -402,8 +402,7 @@ def restore_train(dataset, epochs,training,offset):
     print("Initializing from scratch.")
 
   train_start = time.time()
-  for epoch in range(epochs):
-    epoch+=offset
+  for epoch in range(offset,epochs+1):
     start = time.time()
     batch_count = 0;
 
