@@ -452,7 +452,7 @@ def generate_and_save_images(model, epoch, test_input,training):
       plt.axis('off')
 
   plt.savefig('train{:02d}/image_at_epoch_{:04d}.png'.format(training,epoch))
-  plt.show()
+  #plt.show()
 
 def generate_gif(training):
   anim_file = 'train{:02}/dcgan{:02d}.gif'.format(training,training)
