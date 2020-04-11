@@ -111,26 +111,9 @@ list_ds = tf.data.Dataset.list_files('Hands/*.jpg')
 # Set `num_parallel_calls` so multiple images are loaded/processed in parallel.
 processed_ds = list_ds.map(process_path, num_parallel_calls=AUTOTUNE)
 
-filecache_ds = prepare_for_training(processed_ds, cache="./hands.tfcache")
-
 # shuffle data
-train_ds = prepare_for_training(processed_ds)
-# create image batch
-# image_batch = next(iter(train_ds))
+train_ds = prepare_for_training(processed_ds, cache="./hands.tfcache")
 
-"""### Dataset Info"""
-
-# # Show size of dataset
-# images = list(glob.glob('Hands/*.jpg'))
-# image_count = len(images)
-#
-# num_batches = tf.data.experimental.cardinality(train_ds).numpy()
-#
-# # Print shape of images
-# for image in processed_ds.take(1):
-#   print("Image shape: ", image.numpy().shape)
-#
-# show_batch(image_batch.numpy())
 
 """## **2. Create Models**
 
