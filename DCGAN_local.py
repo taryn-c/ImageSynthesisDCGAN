@@ -435,6 +435,14 @@ def restore_train(dataset, epochs,training,offset):
                            training)
   hours, rem = divmod(end-train_start, 3600)
   minutes, seconds = divmod(rem, 60)
+  generator.save(
+      'train{:02d}/generator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+      signatures=None, options=None
+  )
+  generator.save(
+      'train{:02d}/discriminator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+      signatures=None, options=None
+  )
   print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
 """### Helper functions to generate images and gifs"""
@@ -479,6 +487,7 @@ training=8
 os.mkdir('train{:02d}'.format(training)) # comment out if directory exists
 train(train_ds, EPOCHS,training)
 generate_gifs(training)
+
 
 # training=8
 # restore_train(train_ds, EPOCHS, training, 5)
