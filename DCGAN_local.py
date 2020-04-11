@@ -375,7 +375,20 @@ def train(dataset, epochs,training):
                            training)
   hours, rem = divmod(end-train_start, 3600)
   minutes, seconds = divmod(rem, 60)
-  print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+  
+    generator.save(
+        'train{:02d}/generator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+        signatures=None, options=None
+    )
+    generator.save(
+        'train{:02d}/discriminator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+        signatures=None, options=None
+    )
+    print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+
+    # save training time to txt
+    with open('train{:02d}/time.txt'.format(training), 'w') as f:
+      f.write('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
 """### Restoring checkpoints and resuming training"""
 
@@ -435,6 +448,7 @@ def restore_train(dataset, epochs,training,offset):
                            training)
   hours, rem = divmod(end-train_start, 3600)
   minutes, seconds = divmod(rem, 60)
+
   generator.save(
       'train{:02d}/generator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
       signatures=None, options=None
@@ -444,6 +458,8 @@ def restore_train(dataset, epochs,training,offset):
       signatures=None, options=None
   )
   print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+
+  # save training time to txt
   with open('train{:02d}/time.txt'.format(training), 'w') as f:
     f.write('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
