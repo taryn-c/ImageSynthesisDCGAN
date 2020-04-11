@@ -19,6 +19,7 @@ import pathlib
 import IPython.display as display
 import os
 from PIL import Image
+from numpy.random import random
 from tensorflow.keras import layers
 import time
 import imageio
@@ -239,13 +240,17 @@ Minimizing cross entropy is equivalent to minimizing the negative log likelihood
 # This method returns a helper function to compute cross entropy loss
 cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
+# label smoothing 1 to [0.7,1.2]
+def smooth_positive_labels(y):
+    return y - 0.3 + (random(y.shape) * 0.5)
+
 """### Discriminator Loss
 
 This method quantifies how well the discriminator is able to distinguish real images from fakes. It compares the discriminator's predictions on real images to an array of 1s, and the discriminator's predictions on fake (generated) images to an array of 0s.
 """
 
 def discriminator_loss(real_output, fake_output):
-    real_loss = cross_entropy(tf.fill(real_output, 0.9), real_output)
+    real_loss = cross_entropy(smooth_positive_labels(tf.ones_like(real_output)), real_output)
     fake_loss = cross_entropy(tf.zeros_like(fake_output), fake_output)
     total_loss = real_loss + fake_loss
     return total_loss
@@ -375,20 +380,19 @@ def train(dataset, epochs,training):
                            training)
   hours, rem = divmod(end-train_start, 3600)
   minutes, seconds = divmod(rem, 60)
-  
-    generator.save(
-        'train{:02d}/generator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
-        signatures=None, options=None
-    )
-    generator.save(
-        'train{:02d}/discriminator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
-        signatures=None, options=None
-    )
-    print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
-    # save training time to txt
-    with open('train{:02d}/time.txt'.format(training), 'w') as f:
-      f.write('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+  # save training time to txt
+  generator.save(
+      'train{:02d}/generator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+      signatures=None, options=None
+  )
+  generator.save(
+      'train{:02d}/discriminator.h5'.format(training), overwrite=True, include_optimizer=True, save_format=None,
+      signatures=None, options=None
+  )
+
+  print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
+
 
 """### Restoring checkpoints and resuming training"""
 
