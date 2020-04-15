@@ -23,23 +23,27 @@ Images are resized to 64x64x3, batched into batches of 128, and shuffled. Sample
 
 ### Execution
 
-Usage: `python DCGAN_local.py [-r <offset>] <training> <epochs>`
+#### Training
+    Usage:      python DCGAN_local.py -r <offset> <training session #> <epochs>
+		    python DCGAN_local.py -t <training session #> <epochs>
 
     Options:
-    -r              restore training starting from offset+1 (optional)
+    -r          restore training starting from offset+1
+	-t	    start new training session 
 
     Args:
-    offset:         where the last session ended (required with -r option)
-    training:       training session number (int)
-    epochs:         number of epochs to run for (int)
+    offset:     where the last session ended (required with -r option)
+    training:   training session number (int)
+    epochs:     number of epochs to run for (int)
     
+#### Generating sample images
 
-Usage: `python generate_img.py <training> <noise_dim> <num>`
+    Usage:      python generate_img.py <training> <noise> <num>
 
     Args:
-    training:       training session number to load model (int)
-    noise_dim:      noise dimension that model uses (int)
-    num:            number of examples to generate (int)
+    training:   training session number to load model (int)
+    noise:      noise dimension that model uses (int)
+    num:        number of examples to generate (int)
     
 ### Dependencies:
 
