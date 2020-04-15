@@ -32,7 +32,6 @@ BUFFER_SIZE = 400
 BATCH_SIZE = 128
 IMG_WIDTH = 64
 IMG_HEIGHT = 64
-EPOCHS = 200
 noise_dim = 300
 num_examples_to_generate = 16
 
@@ -491,30 +490,28 @@ def save_models(training):
 """### Execution"""
 
 def main(argv):
-    """Usage: python DCGAN_local.py [-r <offset>] <training session #>
+    """Usage: python DCGAN_local.py [-r <offset>] <training session #> <epochs>
 
     Options:
     -r              restore training starting from offset+1 (optional)
 
     Args:
     offset:         where the last session ended (required with -r option)
-    epoch:          epoch at which we have just finished training (int)
     training:       training session number (int)
+    epochs:         number of epochs to run for (int)
 
     Returns:
     none
 
     """
 
-    # training is the model/session number
-    training=8
-
     try:
-        opts, args = getopt.getopt(argv,"r:",["offset=","training="])
+        opts, args = getopt.getopt(argv,"r:",["offset=","training=","epochs="])
     except getopt.GetoptError:
-        print 'DCGAN_local.py [-r <offset>] <training session #>'
+        print 'DCGAN_local.py [-r <offset>] <training session #> <epochs>'
 
     training = int(args[0])
+    EPOCHS = int(args[1])
 
     for opt, arg in opts:
         if opt in ("-r", "--offset"):
