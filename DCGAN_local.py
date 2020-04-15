@@ -245,8 +245,8 @@ Adam stochastic gradient descent computes individual adaptive learning rates for
 https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/
 """
 
-generator_optimizer = tf.keras.optimizers.Adam(lerning_rate=1e-2,beta_1=0.5)
-discriminator_optimizer = tf.keras.optimizers.Adam(learning_Rate=1e-2,beta_1=0.5)
+generator_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2,beta_1=0.5)
+discriminator_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-2,beta_1=0.5)
 
 """### Checkpoints"""
 
@@ -422,7 +422,7 @@ def restore_train(dataset, epochs,training,offset):
   print ('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
   # save training time to txt
-  with open('train{:02d}/time.txt'.format(training), 'w') as f:
+  with open('train{:02d}/time.txt'.format(training), 'a') as f:
     f.write('Time for training is {} hours and {} mins.'.format(int(hours),int(minutes)))
 
 """### Helper functions to generate images and gifs"""
@@ -484,15 +484,19 @@ def save_models(training):
 """### Execution"""
 
 def main(argv):
-    """Usage: python DCGAN_local.py [-r <offset>] <training session #> <epochs>
+    """
+	Usage:
+				python DCGAN_local.py -r <offset> <training session #> <epochs>
+				python DCGAN_local.py -t <training session #> <epochs>
 
     Options:
-    -r              restore training starting from offset+1 (optional)
+    -r          restore training starting from offset+1
+	-t			start new training session 
 
     Args:
-    offset:         where the last session ended (required with -r option)
-    training:       training session number (int)
-    epochs:         number of epochs to run for (int)
+    offset:		where the last session ended (int)
+    training:	training session number (int)
+    epochs:     number of epochs to run for (int)
 
     Returns:
     none
@@ -500,9 +504,9 @@ def main(argv):
     """
 
     try:
-        opts, args = getopt.getopt(argv,"r:",["offset=","training=","epochs="])
+        opts, args = getopt.getopt(argv,"r:t",["offset=","training=","epochs="])
     except getopt.GetoptError:
-        print 'DCGAN_local.py [-r <offset>] <training session #> <epochs>'
+        print 'DCGAN_local.py [-r <offset>]/-t <training session #> <epochs>'
 
     training = int(args[0])
     EPOCHS = int(args[1])
