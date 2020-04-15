@@ -26,6 +26,14 @@ Usage: `python DCGAN_local.py [-r <offset>] <training> <epochs>`
     training:       training session number (int)
     epochs:         number of epochs to run for (int)
     
+
+Usage: `python generate_img.py <training> <noise_dim> <num>`
+
+    Args:
+    training:       training session number to load model (int)
+    noise_dim:      noise dimension that model uses (int)
+    num:            number of examples to generate (int)
+    
 ### Dependencies:
   - `tensorflow 2.x`
   - `keras`
