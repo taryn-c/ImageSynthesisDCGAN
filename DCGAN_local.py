@@ -107,6 +107,7 @@ train_ds = prepare_for_training(processed_ds, cache="./hands.tfcache")
 # We will reuse this seed overtime (so it's easier)
 # to visualize progress in the animated GIF)
 seed = tf.random.normal([num_examples_to_generate, noise_dim])
+init = RandomNormal(mean=0.0, stddev=0.02)
 
 """## **2. Define Models**
 
@@ -136,22 +137,22 @@ def make_generator_model():
     assert model.output_shape == (None, 4, 4, 1024) # Note: None is the batch size
 
     # upsample to 8x8x512
-    model.add(layers.Conv2DTranspose(512, (5, 5), strides=(2, 2), padding='same', use_bias=False))
+    model.add(layers.Conv2DTranspose(512, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same', use_bias=False))
     assert model.output_shape == (None, 8, 8, 512)
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
-    model.add(layers.Conv2DTranspose(256, (5, 5), strides=(2, 2), padding='same', use_bias=False))
+    model.add(layers.Conv2DTranspose(256, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same', use_bias=False))
     assert model.output_shape == (None, 16, 16, 256)
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
-    model.add(layers.Conv2DTranspose(128, (5, 5), strides=(2, 2), padding='same', use_bias=False))
+    model.add(layers.Conv2DTranspose(128, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same', use_bias=False))
     assert model.output_shape == (None, 32, 32, 128)
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
-    model.add(layers.Conv2DTranspose(3, (5, 5), strides=(2, 2), padding='same', use_bias=False, activation='tanh'))
+    model.add(layers.Conv2DTranspose(3, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same', use_bias=False, activation='tanh'))
     assert model.output_shape == (None, 64, 64, 3)
 
     return model
@@ -172,25 +173,25 @@ http://bamos.github.io/2016/08/09/deep-completion/
 def make_discriminator_model():
     model = tf.keras.Sequential()
     # downsample to 32x32x64
-    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), padding='same',
+    model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same',
                                      input_shape=[64, 64, 3]))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3)) # prevents overfitting
 
     # downsample to 16x16x128
-    model.add(layers.Conv2D(128, (5, 5), strides=(2, 2), padding='same'))
+    model.add(layers.Conv2D(128, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same'))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
     assert model.output_shape == (None, 16, 16, 128)
 
     # downsample to 8x8x256
-    model.add(layers.Conv2D(256, (5, 5), strides=(2, 2), padding='same'))
+    model.add(layers.Conv2D(256, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same'))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
 
     # downsample to 4x4xx512
     # can remove 1-2 layers for faster training but may have worse results
-    model.add(layers.Conv2D(512, (5, 5), strides=(2, 2), padding='same'))
+    model.add(layers.Conv2D(512, (5, 5), strides=(2, 2), kernel_initializer=init, padding='same'))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
 
@@ -491,7 +492,7 @@ def main(argv):
 
     Options:
     -r          restore training starting from offset+1
-	-t			start new training session 
+	-t			start new training session
 
     Args:
     offset:		where the last session ended (int)
