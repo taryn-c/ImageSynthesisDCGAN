@@ -38,12 +38,15 @@ Images are resized to 64x64x3, batched into batches of 128, and shuffled. Sample
     
 #### Generating sample images
 
-    Usage:      python generate_img.py <training> <noise> <num>
+Generates n grids of images. 
+
+    Usage:      python generate_img.py <training> <noise> <grid> <num>
 
     Args:
     training:   training session number to load model (int)
     noise:      noise dimension that model uses (int)
-    num:        number of examples to generate (int)
+    grid:	size of grid (int)
+    num:        number of grids to generate (int)
     
 ### Dependencies:
 
